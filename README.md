@@ -1,5 +1,11 @@
 # farm-chat-service
 
+[![Railway Deploy](https://img.shields.io/badge/Railway-Deployed-success?logo=railway&logoColor=white)](https://farm-chat-service-production.up.railway.app)
+[![Bun](https://img.shields.io/badge/Bun-1.3.1-000000?logo=bun&logoColor=white)](https://bun.sh)
+[![Groq AI](https://img.shields.io/badge/Groq-Llama_3.3_70B-FF6F00?logo=meta&logoColor=white)](https://console.groq.com)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-Business_API-25D366?logo=whatsapp&logoColor=white)](https://developers.facebook.com/docs/whatsapp)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 WhatsApp AI Bot Service que procesa mensajes de WhatsApp y se comunica con el backend de FarmManagement.
 
 ## 🚀 Estado: PRODUCCIÓN
