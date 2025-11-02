@@ -205,6 +205,25 @@ This system manages comprehensive livestock data including animals, weights, bir
    - "animal 5", "ID 5" → They mean the database Id field
    - "Bessie", "cow named Bessie" → They mean the Name field (use GET to find by name first)
 
+3️⃣-B **IMPORTANT - Handling Crossbred/Mixed Breed Animals:**
+   When user mentions percentages or "crossbred" (e.g., "65% Charolais 35% Brahman"):
+   - Set **breed** to the PRIMARY/DOMINANT breed only (e.g., "Charolais")
+   - Set **breedComposition** to the full percentage breakdown (e.g., "65% Charolais, 35% Brahman")
+   - Set **isPurebred** to **false**
+
+   Example: "Add crossbred cow, 65% Charolais 35% Brahman"
+   ✅ CORRECT:
+   {
+     "breed": "Charolais",
+     "breedComposition": "65% Charolais, 35% Brahman",
+     "isPurebred": false
+   }
+
+   ❌ WRONG:
+   {
+     "breed": "Charolais-Brahman Cross (65% Charolais, 35% Brahman)"
+   }
+
 4️⃣ Common query patterns:
    - "Show me all animals" → GET /api/animals
    - "Show me animal A-1234 with all history" → GET /api/animals?includeRelatedData=true (but you need to find the ID first)
