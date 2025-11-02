@@ -63,6 +63,22 @@ FARM_API_URL=https://farm-management-api-production.up.railway.app
 
 **Nota**: El `WHATSAPP_ACCESS_TOKEN` debe renovarse periódicamente (cada 60 días). Ver [Guía de Mantenimiento](../CLAUDE.md#maintenance-guide).
 
+### 🚧 Modo Desarrollo: Rate Limit Fallback
+
+**IMPORTANTE**: El sistema actualmente usa el **tier gratuito de Groq** (100,000 tokens/día).
+
+**Comportamiento en Desarrollo:**
+- Modelo principal: `llama-3.3-70b-versatile` (alta precisión, más tokens)
+- Modelo fallback: `llama3-8b-8192` (menor precisión, menos tokens)
+- Cuando el modelo principal alcanza el rate limit (429), automáticamente cambia al fallback
+
+**TODO Producción (700K usuarios):**
+- ✅ Upgrade a **Groq Dev Tier** (~$0.50-1/día, 500K tokens/día)
+- ❌ Remover lógica de fallback (no será necesaria)
+- 📍 Link: https://console.groq.com/settings/billing
+
+**Código del fallback:** `src/domain/Models/ChatModel.ts` (líneas marcadas con 🚧 DEVELOPMENT MODE)
+
 ### Desarrollo Local
 
 Crea un archivo `.env` en la raíz del proyecto:
