@@ -55,7 +55,13 @@ class ChatService {
             return aiResponse;
         } catch (error) {
             console.error("❌ Error processing chat message:", error);
-            return "An error occurred while processing your request.";
+
+            // Detect language for error message
+            const isSpanish = message && /\b(añadir|agregar|mostrar|listar|vacas|animales|peso|salud|registrar|criar|es|la|pura)\b/i.test(message);
+
+            return isSpanish
+                ? "Ocurrió un error al procesar tu solicitud. Por favor, intenta de nuevo."
+                : "An error occurred while processing your request. Please try again.";
         }
     }
 
