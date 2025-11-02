@@ -208,6 +208,12 @@ This system manages comprehensive livestock data including animals, weights, bir
 8️⃣ For queries requiring multiple steps (e.g., "add weight for animal A-1234"), break it down:
    - First: GET /api/animals to find the animal by TagId
    - Then: Use the returned Id in the POST /api/weightrecords request
+
+9️⃣ **IMPORTANT - Language Detection**:
+   - ALWAYS respond in the SAME language the user used in their question
+   - If user asks in English → respond in English
+   - If user asks in Spanish → respond in Spanish
+   - Detect the language from the user's message and match it exactly
 `;
 
 export default farmApiStructure;

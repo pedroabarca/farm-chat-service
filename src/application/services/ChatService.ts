@@ -45,7 +45,7 @@ class ChatService {
                     } catch (apiError: any) {
                         // 🚨 Handle API errors with user-friendly messages
                         console.error("❌ Farm API Error:", apiError.response?.status, apiError.response?.data);
-                        return ChatService.formatApiError(apiError, apiQuery.method);
+                        return ChatService.formatApiError(apiError, apiQuery.method, message);
                     }
                 }
             } catch (parseError) {
@@ -60,18 +60,24 @@ class ChatService {
     }
 
     /**
-     * Formats API errors into user-friendly messages.
+     * Formats API errors into user-friendly messages in English or Spanish.
      * @param error - Axios error object
      * @param method - HTTP method (GET/POST/PUT/DELETE)
+     * @param userMessage - Original user message (to detect language)
      * @returns User-friendly error message
      */
-    static formatApiError(error: any, method: string): string {
+    static formatApiError(error: any, method: string, userMessage?: string): string {
         const status = error.response?.status;
         const errorData = error.response?.data;
 
+        // Detect language from user message (simple detection)
+        const isSpanish = userMessage && /\b(añadir|agregar|mostrar|listar|vacas|animales|peso|salud|registrar|criar)\b/i.test(userMessage);
+
         // Network/connection errors
         if (!status) {
-            return "❌ Sorry, I couldn't connect to the farm management system. Please try again in a moment.";
+            return isSpanish
+                ? "❌ Lo siento, no pude conectarme al sistema de gestión de finca. Por favor, inténtalo de nuevo en un momento."
+                : "❌ Sorry, I couldn't connect to the farm management system. Please try again in a moment.";
         }
 
         // 400 - Validation errors
@@ -80,31 +86,45 @@ class ChatService {
                 const fieldErrors = Object.entries(errorData.details)
                     .map(([field, errors]: [string, any]) => `• ${field}: ${errors.join(", ")}`)
                     .join("\n");
-                return `❌ Some information is missing or incorrect:\n\n${fieldErrors}\n\nPlease check and try again.`;
+                return isSpanish
+                    ? `❌ Falta información o hay datos incorrectos:\n\n${fieldErrors}\n\nPor favor, verifica e intenta de nuevo.`
+                    : `❌ Some information is missing or incorrect:\n\n${fieldErrors}\n\nPlease check and try again.`;
             }
-            return "❌ The information provided is incomplete or invalid. Please check your data and try again.";
+            return isSpanish
+                ? "❌ La información proporcionada está incompleta o es inválida. Por favor, verifica tus datos e intenta de nuevo."
+                : "❌ The information provided is incomplete or invalid. Please check your data and try again.";
         }
 
         // 404 - Not found
         if (status === 404) {
             if (method === "GET") {
-                return "❌ I couldn't find that animal or record. Please check the name or tag ID and try again.";
+                return isSpanish
+                    ? "❌ No pude encontrar ese animal o registro. Por favor, verifica el nombre o ID de etiqueta e intenta de nuevo."
+                    : "❌ I couldn't find that animal or record. Please check the name or tag ID and try again.";
             }
-            return "❌ The requested resource was not found.";
+            return isSpanish
+                ? "❌ El recurso solicitado no fue encontrado."
+                : "❌ The requested resource was not found.";
         }
 
         // 409 - Conflict (duplicate)
         if (status === 409) {
-            return "❌ This record already exists (duplicate tag ID or name). Please use a different identifier.";
+            return isSpanish
+                ? "❌ Este registro ya existe (ID de etiqueta o nombre duplicado). Por favor, usa un identificador diferente."
+                : "❌ This record already exists (duplicate tag ID or name). Please use a different identifier.";
         }
 
         // 500 - Server error
         if (status >= 500) {
-            return "❌ The farm management system encountered an error. Our team has been notified. Please try again later.";
+            return isSpanish
+                ? "❌ El sistema de gestión de finca encontró un error. Nuestro equipo ha sido notificado. Por favor, intenta más tarde."
+                : "❌ The farm management system encountered an error. Our team has been notified. Please try again later.";
         }
 
         // Generic error
-        return `❌ Something went wrong. Please try again or contact support if the problem persists.`;
+        return isSpanish
+            ? "❌ Algo salió mal. Por favor, intenta de nuevo o contacta soporte si el problema persiste."
+            : "❌ Something went wrong. Please try again or contact support if the problem persists.";
     }
 
     /**

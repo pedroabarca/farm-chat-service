@@ -35,13 +35,24 @@ class ChatModel {
                 prompt = `
         User asked: "${message}".
         The farm system responded with this data: ${JSON.stringify(apiData)}.
-        Convert this into a short, natural-sounding response always respond only using the same
-        language the user used or asked: spanish or english
 
-        Example:
+        **IMPORTANT - Language Rule:**
+        - ALWAYS respond in the SAME EXACT language the user used in their question
+        - If the user asked in English, you MUST respond in English
+        - If the user asked in Spanish, you MUST respond in Spanish
+        - Detect the language from the user's message and match it exactly
+
+        Convert the API data into a short, natural-sounding response in the user's language.
+
+        Example (English):
         - Question: "How many cows are in the farm?"
         - API Data: { "count": 150 }
         - AI Response: "Your farm has 150 cows."
+
+        Example (Spanish):
+        - Question: "¿Cuántas vacas hay en la finca?"
+        - API Data: { "count": 150 }
+        - AI Response: "Tu finca tiene 150 vacas."
 
         User: "${message}"
         AI:
