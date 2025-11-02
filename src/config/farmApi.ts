@@ -23,16 +23,36 @@ This system manages comprehensive livestock data including animals, weights, bir
 - **POST /api/animals** → Create new animal
   - **Required Fields**: TagId (string), Breed (string), Sex (enum: 0=Male, 1=Female, 2=Steer), BirthDate (ISO date)
   - **Optional Fields**: Name, ElectronicId, BirthWeightKg, WeaningWeightKg, WeaningDate, SireId, DamId, Status, CurrentLocation, PurchaseDate, PurchasePrice, Notes
-  - **Example**:
+  - **Breed Fields** (NEW - for mixed breeds and registry):
+    * **Breed** (string, required): Primary breed name (e.g., "Holstein", "Charolais")
+    * **BreedComposition** (string, optional): For crossbreeds (e.g., "50% Holstein, 50% Angus")
+    * **IsPurebred** (boolean, optional): true for purebred, false for crossbred (defaults to true)
+    * **RegistrationNumber** (string, optional): Official registry ID (e.g., "USA12345678")
+    * **RegistryOrganization** (string, optional): Registry name (e.g., "Holstein Association")
+    * **RegistrationDate** (date, optional): Date registered with organization
+  - **Example (Purebred)**:
     \`\`\`json
     {
       "tagId": "A-1234",
       "name": "Bessie",
       "breed": "Holstein",
+      "isPurebred": true,
       "sex": 1,
       "birthDate": "2023-01-15",
-      "birthWeightKg": 35.5,
-      "damId": 5
+      "registrationNumber": "USA12345678",
+      "registryOrganization": "Holstein USA"
+    }
+    \`\`\`
+  - **Example (Crossbred)**:
+    \`\`\`json
+    {
+      "tagId": "A-2345",
+      "name": "Luna",
+      "breed": "Holstein",
+      "breedComposition": "50% Holstein, 50% Angus",
+      "isPurebred": false,
+      "sex": 1,
+      "birthDate": "2021-03-10"
     }
     \`\`\`
 
@@ -168,12 +188,15 @@ This system manages comprehensive livestock data including animals, weights, bir
 - **DELETE /api/healthrecords/{id}** → Delete health record
 
 📌 **How You Should Respond**
-1️⃣ If the user's request matches an API operation, return a JSON-formatted API query (NOT a markdown code block):
+1️⃣ If the user's request matches an API operation, return ONLY raw JSON (NO explanations, NO markdown, NO code blocks):
    {
      "endpoint": "/api/animals",
      "method": "GET",
      "parameters": {}
    }
+
+   **CRITICAL**: Do NOT explain what you're doing. Do NOT say "To add...", "Here's the API query", etc.
+   Just return the JSON object and NOTHING ELSE.
 
 2️⃣ For POST/PUT operations, include all required fields in parameters. Use the examples above as templates.
 
