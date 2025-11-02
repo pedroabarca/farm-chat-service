@@ -224,32 +224,35 @@ ALWAYS save both notations in breedComposition:
 - User says "75% Brahman 25% Angus" → Save as "3/4 Brahman, 1/4 Angus (75% Brahman, 25% Angus)"
 - User says "half and half" → Save as "1/2 Simmental, 1/2 Angus (50% Simmental, 50% Angus)"
 
-🔸 **CRITICAL: Registered Crossbreeds are PUREBRED:**
-**Industry Standard**: Established crossbreeds like Charbray, Brangus, etc. are registered breeds.
-When user says just the crossbreed name WITHOUT mixing with other breeds, mark as isPurebred: TRUE
+🔸 **CRITICAL: When is a Registered Crossbreed Considered PUREBRED?**
+**Industry Standard**: Established crossbreeds like Charbray, Brangus, etc. are registered breeds ONLY when they are 100% that breed.
 
 ✅ Mark as PUREBRED (isPurebred: true):
-- "Add Charbray cow" → This is a registered breed
-- "Add purebred Brangus"
-- "Add Braford bull"
-- "Add 5/8 Charbray" → Standard Charbray composition
+- "Add Charbray cow" → 100% Charbray (5/8 Charolais + 3/8 Brahman)
+- "Add purebred Brangus" → 100% Brangus
+- "Add Braford bull" → 100% Braford
+- "Add 5/8 Charolais 3/8 Brahman" → This IS Charbray (full composition)
 
 ❌ Mark as CROSSBRED (isPurebred: false):
-- "Add 1/2 Charbray 1/2 Angus" → Mixing Charbray with another breed
-- "Add 3/4 Brahman 1/4 Holstein" → Custom mix
-- "Add Charbray-Holstein cross" → Mixing two breeds
+- "Add 3/4 Charbray" → Only 75% Charbray, 25% something else - NOT purebred
+- "Add 1/2 Charbray 1/2 Angus" → 50/50 mix - NOT purebred
+- "Add 5/8 Charbray" → Only 62.5% Charbray - NOT purebred
+- "Add 3/4 Brahman 1/4 Holstein" → Custom mix - NOT purebred
+- "Add Charbray-Holstein cross" → Mixing two breeds - NOT purebred
+
+**IMPORTANT**: If user specifies a FRACTION of a crossbreed (like "3/4 Charbray"), they are mixing that crossbreed with something else, so it's NOT purebred!
 
 🔸 **Updated Examples:**
 
 Example 1: "Add cow, Charbray, tag A-100"
 - breed: "Charbray"
 - breedComposition: "5/8 Charolais, 3/8 Brahman (62.5% Charolais, 37.5% Brahman)"
-- isPurebred: **true** (registered Charbray)
+- isPurebred: **true** (100% Charbray = registered purebred)
 
-Example 2: "Add cow, 5/8 Charbray, tag A-101"
+Example 2: "Add cow, 3/4 Charbray, tag A-101"
 - breed: "Charbray"
-- breedComposition: "5/8 Charbray (62.5%)"
-- isPurebred: **true** (standard Charbray composition)
+- breedComposition: "3/4 Charbray (75%)"
+- isPurebred: **false** (only 75% Charbray, 25% other = crossbred)
 
 Example 3: "Add bull, 3/4 Brahman 1/4 Angus, tag B-200"
 - breed: "Brahman"
@@ -269,7 +272,12 @@ Example 5: "Add cow, 1/2 Charbray 1/2 Holstein, tag C-400"
 Example 6: "Add purebred Holstein"
 - breed: "Holstein"
 - breedComposition: null (or omit - not needed for traditional purebreds)
-- isPurebred: true
+- isPurebred: **true**
+
+Example 7: "Add cow, 5/8 Charolais 3/8 Brahman, tag D-500"
+- breed: "Charbray"
+- breedComposition: "5/8 Charolais, 3/8 Brahman (62.5% Charolais, 37.5% Brahman)"
+- isPurebred: **true** (this IS the full Charbray composition = purebred Charbray)
 
 📌 **How You Should Respond**
 1️⃣ If the user's request matches an API operation, return ONLY raw JSON (NO explanations, NO markdown, NO code blocks):
